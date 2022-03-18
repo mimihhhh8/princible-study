@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>手风琴</title>
+  <style>
+    .showBox {
+      width: 660px;
+      overflow: hidden;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 30000px;
+    }
+
+    ul li.active {
+      width: 550px;
+    }
+
+    ul li {
+      float: left;
+      position: relative;
+      height: 254px;
+      width: 22px;
+      overflow: hidden;
+    }
+
+    ul li img {
+      width: 660px;
+      height: 254px;
+    }
+
+    ul li span {
+      width: 22px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 204px;
+      padding-top: 50px;
+    }
+
+    ul li span.bg1 {
+      background: #333;
+    }
+
+    ul li span.bg2 {
+      background: #0f0;
+    }
+
+    ul li span.bg3 {
+      background: #ff7500;
+    }
+
+    ul li span.bg4 {
+      background: #0ff;
+    }
+
+    ul li span.bg5 {
+      background: #00f;
+    }
+  </style>
+
+  <script type="text/javascript">
+    window.onload = function () {
+      createAccordion('.showBox');
+    };
+
+    function createAccordion(name) {
+      /*获取元素*/
+      var oDiv = document.querySelector(name);
+      /*声明最小宽度*/
+      var iMinWidth = 9999999;
+      /*获取元素*/
+      var aLi = oDiv.getElementsByTagName('li');
+      var aSpan = oDiv.getElementsByTagName('span');
+      console.log('aSpan', aSpan)
+      /*定时器容器默认*/
+      oDiv.timer = null;
+      /*循环添加事件和自定义属性索引值*/
+      for (var i = 0; i < aSpan.length; i++) {
+        aSpan[i].index = i;
+        aSpan[i].onmouseover = function () {
+          gotoImg(oDiv, this.index, iMinWidth);
+        };
+        /*获取最小宽度*/
+        iMinWidth = Math.min(iMinWidth, aLi[i].offsetWidth);
+      }
+    };
+
+    function gotoImg(oDiv, iIndex, iMinWidth) {
+      if (oDiv.timer) { /*清除定时器，避免叠加*/
+        clearInterval(oDiv.timer);
+      }
+      /*开启定时器*/
+      oDiv.timer = setInterval
+        (
+          function () {
+            changeWidthInner(oDiv, iIndex, iMinWidth);
+          }, 30
+        );
+    }
+    /*这里是关键，运动*/
+    function changeWidthInner(oDiv, iIndex, iMinWidth) {
+      var aLi = oDiv.getElementsByTagName('li');
+      var aSpan = oDiv.getElementsByTagName('span');
+      /*获取盒子的大小，这个是总宽度*/
+      var iWidth = oDiv.offsetWidth;
+      /*缩进去的图片的宽度声明*/
+      var w = 0;
+      /*判断的声明,为了清除定时器声明*/
+      var bEnd = true;
+      /*循环为了把每个图片都循环一遍，为了获取伸进和缩去的元素*/
+      for (var i = 0; i < aLi.length; i++) {
+        /*这为获取伸进的索引*/
+        if (i == iIndex) {
+          continue;
+        }
+        /*这里是没有变动的元素，所以都保存最小宽度*/
+        if (iMinWidth == aLi[i].offsetWidth) {
+          /*总宽度减去这些宽度,因为他们也在总宽度里*/
+          iWidth -= iMinWidth;
+          continue;
+        }
+        /*走以下的循环里代码的是缩去的元素*/
+        /*不清除定时器，还没运动完*/
+        bEnd = false;
+        /*获取速度,先快后慢*/
+        speed = Math.ceil((aLi[i].offsetWidth - iMinWidth) / 10);
+        /*缩去剩下的宽度*/
+        w = aLi[i].offsetWidth - speed;
+        /*为避免缩去元素小于最小宽度*/
+        if (w <= iMinWidth) {
+          w = iMinWidth;
+        }
+        /*设置缩去元素的宽度*/
+        aLi[i].style.width = w + 'px';
+        /*减去缩去的宽度，剩下的就是伸进的宽度*/
+        iWidth -= w;
+      }
+      /*伸进元素的宽度*/
+      aLi[iIndex].style.width = iWidth + 'px';
+
+      if (bEnd) {
+        clearInterval(oDiv.timer);
+        oDiv.timer = null;
+      }
+    }
+
+
+  </script>
+</head>
+
+<body>
+  <div class="showBox">
+    <ul>
+      <li class="active"><span class="bg1">这是第一个</span><img src="./img/1.png" alt=""></li>
+      <li><span class="bg2">这是第二个</span><img src="./img/2.png" alt=""></li>
+      <li><span class="bg3">这是第三个</span><img src="./img/3.png" alt=""></li>
+      <li><span class="bg4">这是第四个</span><img src="./img/4.png" alt=""></li>
+      <li><span class="bg5">这是第五个</span><img src="./img/5.png" alt=""></li>
+    </ul>
+  </div>
+</body>
+
+</html>
