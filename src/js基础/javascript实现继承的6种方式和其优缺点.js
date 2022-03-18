@@ -63,23 +63,47 @@ Animal.prototype.eat = function (food) {
  * 缺点：实现比较复杂
  */
 
-function Cat() {
-  Animal.call(this);
-}
+// function Cat() {
+//   Animal.call(this);
+// }
 
-(function () {
-  var Super = function () {};
-  Super.prototype = Animal.prototype;
-  Cat.prototype = new Super();
-})();
+// (function () {
+//   var Super = function () {};
+//   Super.prototype = Animal.prototype;
+//   Cat.prototype = new Super();
+// })();
 
-new Cat();
+// new Cat();
 
 /**
  * es6中的class
  */
-// class Super(){
-//   constructor(props = {name:"eric"}){
-//      this.name = props
-//   }
-// }
+class Super {
+  constructor(props = { name: "eric" }) {
+    this.name = props;
+  }
+
+  setName(name) {
+    this.name = name;
+  }
+
+  getName() {
+    return this.name;
+  }
+}
+
+class Sub extends Super {
+  // constructor(props) {
+  //   super((props = { sex: "male" }));
+  //   this.sex = props.sex;
+  // }
+
+  setSubName(name) {
+    this.name = name;
+  }
+}
+
+let sub1 = new Sub();
+sub1.setName({ name: "郭荣" });
+sub1.setSubName({ name: "夏利" });
+console.log("sub1", sub1.name);
