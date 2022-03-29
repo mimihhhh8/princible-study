@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+    <input type="button" value="跑马灯走起" @click="startMethod">
+    <input type="button" value="跑马灯停止" @click="stopMethod">
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el:"#app",
+      data:{
+        msg:'昨天是段历史，明天是个谜团～～～',
+        intervalId:null
+      },
+      methods:{
+        startMethod(){
+          console.log('hahahha')
+          if(this.intervalId !=null) return
+
+          this.intervalId = setInterval(()=>{
+            let start = this.msg.substring(0,1)
+            let end = this.msg.substring(1)
+            this.msg = end + start
+            console.log('this.msg',this.msg)
+          },400)
+
+
+        },
+        stopMethod(){
+          clearInterval(this.intervalId)
+          this.intervalId = null
+        }
+      }
+    })
+  </script>
+</body>
+</html>
