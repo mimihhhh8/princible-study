@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <style>
+    /* 多个组件切换时，通过mode属性添加过渡的动画 */
+    .my-enter,
+    .my-leave-to{
+      opacity: 0;
+      transform: translateY(150px);
+    }
+    .my-enter-active,
+    .my-leave-active{
+      transition: all 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <button @click="comName='login'">登录</button>
+    <button @click="comName='register'">注册</button>
+    
+    <transition mode="out-in" name="my">
+      <component :is="comName"></component>
+    </transition>
+  </div>
+  <script>
+    Vue.component('login',{
+      template:'<h3>登录组件</h3>'
+    })
+
+    Vue.component('register',{
+      template:'<h3>注册组件</h3>'
+    })
+
+    var vm = new Vue({
+      el:"#app",
+      data:{
+        comName:'login'
+      }
+    })
+  </script>
+</body>
+</html>
